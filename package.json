@@ -5,7 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch src/fundamental.js"
+    "dev": "node --watch src/fundamental.js",
+    "upload": "node src/fake-upload-to-http-stream.js",
+    "server": "node src/http-server.js"
   },
   "keywords": [],
   "author": "",

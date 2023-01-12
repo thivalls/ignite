@@ -9,14 +9,14 @@ class OneToHandredStream extends Readable {
 
         setTimeout(() => {
 
-            if (i > 10) {
+            if (i > 5) {
                 this.push(null)
             } else {
                 let buf = Buffer.from(String(i))
                 this.push(buf)
             }
 
-        }, 1000)
+        }, 500)
 
     }
 }
@@ -25,4 +25,9 @@ fetch('http://localhost:3334', {
     method: 'POST',
     body: new OneToHandredStream(),
     duplex: 'half',
+}).then(response => {
+    //console.log(response.body)
+    return response.text()
+}).then(data => {
+    console.log(data)
 })

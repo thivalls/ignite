@@ -1,23 +1,19 @@
-import http from 'node:http'
-import { Database } from './database/database.js'
-import { json } from './middlewares/json.js'
 
-const database = new Database();
+import http from 'node:http'
+import { json } from './middlewares/json.js'
+import { routes } from './routes/routes.js'
 
 const server = http.createServer(async (req, res) => {
     const { method, url } = req
 
-    const users = database.select('users')
-
     await json(req, res)
 
-    if (url === "/create" && method === "POST") {
-        database.insert('users', req.body)
-        return res.writeHead(201).end()
-    }
+    const route = routes.find(route => {
+        return route.method == method && route.path == url
+    })
 
-    if (url === "/list" && method === "GET") {
-        return res.end(JSON.stringify(users))
+    if(route) {
+        return route.handler(req, res)
     }
 
     return res.writeHead(404).end('Route not founded')

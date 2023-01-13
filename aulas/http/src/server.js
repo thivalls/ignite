@@ -2,23 +2,29 @@ import http from 'node:http'
 
 const users = []
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
     const { method, url } = req
 
-    if (url === "/create" && method === "POST") {
-        users.push({
-            id: '1',
-            name: 'Thiago',
-            email: 'customer@test.com.br',
-        })
+    const buffers = []
 
+    for await (const chunk of req) {
+        buffers.push(chunk)
+    }
+
+    try {    
+        req.body = JSON.parse(Buffer.concat(buffers).toString())
+    } catch {
+        req.body = null
+    }
+
+    if (url === "/create" && method === "POST") {
+        users.push(req.body)
         return res.writeHead(201).end()
     }
 
     if (url === "/list" && method === "GET") {
         return res
             .setHeader('Content-type', 'application/json')
-            // .setHeader('Custom', 'thiago')
             .end(JSON.stringify(users))
     }
 

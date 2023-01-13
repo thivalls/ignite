@@ -1,15 +1,18 @@
 import http from 'node:http'
+import { Database } from './database/database.js'
 import { json } from './middlewares/json.js'
 
-const users = []
+const database = new Database();
 
 const server = http.createServer(async (req, res) => {
     const { method, url } = req
 
+    const users = database.select('users')
+
     await json(req, res)
 
     if (url === "/create" && method === "POST") {
-        users.push(req.body)
+        database.insert('users', req.body)
         return res.writeHead(201).end()
     }
 

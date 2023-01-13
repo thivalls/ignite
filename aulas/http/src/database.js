@@ -33,4 +33,22 @@ export class Database {
 
         this.#persist()
     }
+
+    delete(table, id) {
+        if(Array.isArray(this.#database[table])) {
+            const index = this.#database[table].indexOf(this.#database[table].find(item => item.id === id))
+            this.#database[table].splice(index, 1);
+            this.#persist()
+        } else {
+            return;
+        }
+    }
+
+    find(table, id) {
+        if(Array.isArray(this.#database[table])) {
+            return this.#database[table].find(item => item.id === id)
+        } else {
+            return;
+        }
+    }
 }

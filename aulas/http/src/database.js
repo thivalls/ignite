@@ -25,7 +25,7 @@ export class Database {
     }
 
     insert(table, data) {
-        if(Array.isArray(this.#database[table])) {
+        if (Array.isArray(this.#database[table])) {
             this.#database[table].push(data)
         } else {
             this.#database[table] = [data]
@@ -35,17 +35,27 @@ export class Database {
     }
 
     delete(table, id) {
-        if(Array.isArray(this.#database[table])) {
-            const index = this.#database[table].indexOf(this.#database[table].find(item => item.id === id))
+
+        const index = this.#database[table].findIndex(row => row.id === id)
+        if (index > -1) {
             this.#database[table].splice(index, 1);
             this.#persist()
-        } else {
-            return;
         }
+
+    }
+
+    update(table, id, data) {
+
+        const index = this.#database[table].findIndex(row => row.id === id)
+        if (index > -1) {
+            this.#database[table][index] = { id, ...data };
+            this.#persist()
+        }
+
     }
 
     find(table, id) {
-        if(Array.isArray(this.#database[table])) {
+        if (Array.isArray(this.#database[table])) {
             return this.#database[table].find(item => item.id === id)
         } else {
             return;

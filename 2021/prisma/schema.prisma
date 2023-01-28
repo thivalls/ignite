@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Transporter {
+  id       String     @id @default(uuid())
+  name     String     @unique
+  password String
+  Delivery Delivery[]
+
+  @@map("transporters")
+}
+
+model Client {
+  id       String     @id @default(uuid())
+  name     String     @unique
+  password String
+  Delivery Delivery[]
+
+  @@map("clients")
+}
+
+model Delivery {
+  id             String   @id @default(uuid())
+  id_client      String
+  id_transporter String
+  item           String
+  created_at     DateTime
+  end_at         DateTime
+
+  client      Client      @relation(fields: [id_client], references: [id])
+  transporter Transporter @relation(fields: [id_transporter], references: [id])
+
+  @@map("deliveries")
+}

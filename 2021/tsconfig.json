@@ -4,7 +4,7 @@
     "outDir": "dist",
     "strict": true,
     "lib": [
-      "ESNext"
+      "esnext"
     ],
     "esModuleInterop": true
   }
